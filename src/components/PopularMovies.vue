@@ -69,14 +69,18 @@ export default {
 
   button {
     padding: 10px 20px;
+    width: 80%;
+    border: none;
     background: #2f1884;
     color: white;
-    border-radius: 25px;
+    border-radius: 15px;
     font-size: 1.1rem;
+    transition: 0.2s ease;
   }
 
   button:hover{
     cursor: pointer;
+    background: #482ab4;
   }
 
   .search-movie{
@@ -97,17 +101,26 @@ export default {
 
   .movie-item img{
     width: 100%;
-    max-height: 400px;
     width: auto; 
     margin: auto;
+    border-radius: 25px 25px 0 0;
   }
 
   .movie-item{
     text-align: center;
     border: 1px solid #cacaca;
-    padding: 10px;
     border-radius: 25px;
-    box-shadow: 0 0 20px 0 black;
+    transition: .2s ease;
+  }
+  .movie-item:hover{
+    box-shadow: 0 0 5px 0px black;
+  }
+  .movie-item h1{
+    padding: 0px 10px;
+    font-size: 1.5rem;
+  }
+  .movie-item p{
+    padding: 5px 10px;
   }
   .movie-item p{
     text-align: justify;
