@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <PopularMovies @addtolist="addtolist"/>
+  <div>
+    <PopularMovies/>
   </div>
 </template>
 
@@ -12,12 +12,6 @@ export default {
   name: 'Home',
   components: {
     PopularMovies
-  },
-  methods: {
-    addtolist (value) {
-      console.log("home: " + value);
-      this.$emit('addtolist', value);
-    }
   },
 }
 </script>

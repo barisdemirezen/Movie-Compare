@@ -1,26 +1,15 @@
 <template>
   <div>
-    <div class="navbar">
-      <ul>
-        <li><router-link class="link" to='/'>Home</router-link></li>
-        <li><router-link class="link" to="/compare">Film Basket</router-link></li>
-        <li class="link basket">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-        </svg>
-          <div>{{listItems.length}}</div>
-        </li>
-      </ul>
-    </div>
-    <div class="container">
+    <Navbar/>
+        <div class="container">
       <router-view @addtolist="addtolist" :movies="listItems"></router-view>
     </div>
   </div>
 </template>
 <script>
-
+import  Navbar  from "./components/Navbar.vue";
 export default {
-  components: {},
+  components: {Navbar},
   data(){
     return {
       listItems : [],
@@ -90,4 +79,23 @@ export default {
   .basket:hover{
     cursor: pointer;
   }
+  * {
+  scrollbar-width: thin;
+  scrollbar-color: #2f1884 transparent;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #2f1884;
+  border-radius: 20px;
+}
 </style>

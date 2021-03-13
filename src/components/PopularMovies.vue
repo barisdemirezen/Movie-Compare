@@ -9,12 +9,13 @@
           <img :src="'https://image.tmdb.org/t/p/w300' + movie.poster_path">
           <h1>{{movie.original_title}}</h1>
           <p>{{movie.overview}}</p>
-          <button class="addtolist" @click="addtolist(movie.id)">Add to compare</button>
+          <button class="addtolist" @click="addToBasket(movie)" >Add to compare</button>
         </div>        
       </div>
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -24,9 +25,7 @@ export default {
     }
   },
   methods: {
-    addtolist (id) {
-        this.$emit('addtolist', id);
-    },
+    ...mapActions(["addToBasket"]),
     searchall(){
       fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.VUE_APP_ENV_APIKEY}`)
         .then((response) => response.json())
@@ -94,7 +93,7 @@ export default {
   .inner-container{
     margin-top: 2vh;
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: repeat(4, 1fr);
     grid-column-gap: 25px;
     grid-row-gap: 50px;
   }
