@@ -5,7 +5,7 @@
                 <img class="film-detail-grid-image" draggable="false" v-if="getLeftImage.length != 0" :src="'https://image.tmdb.org/t/p/w500' + getLeftImage.poster_path">
                 <div class="average-points">{{getLeftImage.vote_average}}</div>
                 <h1 v-if="getLeftImage.length == 0">Drop some poster to get details</h1>
-                <h1>{{getLeftImage.original_title}}</h1>
+                <h1 v-on:click.prevent.self >{{getLeftImage.original_title}}</h1>
                 <div class="genre-container">
                     <div class="genre-badge" v-for="genres in getLeftImage.genres" :key="genres.id">{{genres.name}}</div>
                 </div>
@@ -21,18 +21,48 @@
                 </div>            
             </div>
         </div>
+
+        <div class="details">
+        <h1 class="details-heading">Details</h1>
+            <div class="details-row" v-for="info in holder" :key="info.name">
+                <div class="detail-name-column">{{info.name}}</div>
+                <div class="detail-column">{{info.left}}</div>
+                <div class="detail-column">{{info.right}}</div>
+            </div>
+        </div>
+
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 export default {
     name: "FilmDetailGrid",
     data() {
         return {
+            holder : [],
+            infoNames : [
+                "Overview",
+                "Release Date",
+                "Length (in min.)",
+                "Languages",
+                "Budget",
+                "Revenue",
+                "Film Site",
+                "Production companies",
+                "Production Countries",
+                "IMDB"
+            ],
         }
+    },
+    mounted(){
+        this.holder.push(
+            {name: 'Overview', left: this.leftImage.overview, right: this.leftImage.overview},
+            {name: 'Release Date', left: this.leftImage.release_date, right: this.leftImage.release_date},
+            );
     },
     computed: {
         ...mapGetters(['getLeftImage','getRightImage']),
+        ...mapState(['leftImage','rightImage'])
     },
     methods: {
         ...mapActions(["changeCompareImage"]),
@@ -54,6 +84,22 @@ export default {
 }
 </script>
 <style>
+.details-row {
+    display: grid;
+    grid-template-columns: 20% 40% 40%;
+    gap: 5px;
+}
+.details-row div{
+    border: 3px solid red;
+    width: 100%;
+}
+.details-heading{
+    text-align: center;
+}
+.details{
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+}
     .film-detail-grid{
         display: grid;
         justify-content: center;
