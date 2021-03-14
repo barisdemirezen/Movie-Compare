@@ -1,37 +1,54 @@
 <template>
     <div>
         <div class="film-detail-grid">
-            <div @dragover.prevent @drop="dragFinish(0)" class="film-detail-grid-column">
-                <h1>Drag a film here</h1>
-                <img :src="leftImage">
+            <div draggable="false" @dragover.prevent @drop="dragFinish(0)" class="film-detail-grid-column">
+                <img class="film-detail-grid-image" draggable="false" v-if="getLeftImage.length != 0" :src="'https://image.tmdb.org/t/p/w500' + getLeftImage.poster_path">
+                <div class="average-points">{{getLeftImage.vote_average}}</div>
+                <h1 v-if="getLeftImage.length == 0">Drop some poster to get details</h1>
+                <h1>{{getLeftImage.original_title}}</h1>
+                <div class="genre-container">
+                    <div class="genre-badge" v-for="genres in getLeftImage.genres" :key="genres.id">{{genres.name}}</div>
+                </div>
             </div>
-            <div @dragover.prevent @drop="dragFinish(1)" class="film-detail-grid-column">
-                <h1>Drag a film here</h1>
-                <img :src="rightImage">
+
+            <div draggable="false" @dragover.prevent @drop="dragFinish(1)" class="film-detail-grid-column">                
+                <img draggable="false" v-if="getRightImage.length != 0" :src="'https://image.tmdb.org/t/p/w500' + getRightImage.poster_path">
+                <div class="average-points">{{getRightImage.vote_average}}</div>
+                <h1 v-if="getRightImage.length == 0">Drop some poster to get details</h1>
+                <h1>{{getRightImage.original_title}}</h1>    
+                <div class="genre-container">
+                    <div class="genre-badge" v-for="genres in getRightImage.genres" :key="genres.id">{{genres.name}}</div>
+                </div>            
             </div>
         </div>
     </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
     name: "FilmDetailGrid",
     data() {
         return {
-            leftImage: '',
-            rightImage: '',
         }
     },
+    computed: {
+        ...mapGetters(['getLeftImage','getRightImage']),
+    },
     methods: {
+        ...mapActions(["changeCompareImage"]),
         dragFinish(column){
             event.preventDefault();
-            var data = event.dataTransfer.getData("imagepath");
-            if(column){
-                this.rightImage = data;
+            var id = event.dataTransfer.getData("id");
+            if(id !== 'null'){
+                if(column){                    
+                    this.right = id;
+                    this.changeCompareImage({id : id, option: "right"});
+                }
+                else if(!column){
+                    this.left = id;
+                    this.changeCompareImage({id : id, option: "left"});
+                }
             }
-            else if(!column){
-                this.leftImage = data;
-            }
-            
         }
     },
 }
@@ -39,15 +56,57 @@ export default {
 <style>
     .film-detail-grid{
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-column-gap: 10px;
+        justify-content: center;
+        grid-template-columns: 30vw 30vw;
+        grid-column-gap: 100px;
         place-items: center;
+        align-items:start;
     }
     .film-detail-grid-column{
         display:grid;
         place-items:center;
-        border: 3px solid #2f1884;
+        border: 3px solid rgba(47, 24, 132,0.3);
         border-radius: 25px;
         width: 100%;
+        transition: .2s ease;
+    }
+    .film-detail-grid-column:hover{
+        border: 3px solid rgb(47, 24, 132);
+    }
+    .film-detail-grid-column img{
+        width: 100%;
+        border-radius:25px 25px 0 0 ;
+    }
+    .genre-container{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        grid-row-gap: 10px;
+    }
+    .genre-badge {
+        background: #cacaca;
+        border-radius: 25px;
+        padding: 5px 10px;
+        color: white;
+        margin: 0 10px;
+    }
+    .film-detail-grid-column{
+        position: relative;
+    }
+    .average-points{
+        position: absolute;
+        top: -2vw;
+        right: -2vw;
+        width: 3vw;
+        height: 3vw;
+        background: #c0ff74;
+        border-radius: 100%;
+        padding: 15px;
+        color:black;
+        font-weight: 600;
+        display:grid;
+        place-items:center;
+        font-size: 1.6rem;
+        border: 3px solid black;
     }
 </style>

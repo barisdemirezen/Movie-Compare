@@ -2,8 +2,8 @@
     <div>
         <div class="film-outer-container" v-if="getBasketLength">
             <div class="film-container">
-                <div id="done" draggable @dragstart="startDrag()" v-for="film in getBasket" :key="film.id" :value="film.id">
-                    <img class="film-item" :src="film.image">
+                <div class="film-item" draggable @dragstart="startDrag()" v-for="film in getBasket" :key="film.id">
+                    <img :src="film.image"  :value="film.id">
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@ export default {
     },
     methods: {
         startDrag(){
-            event.dataTransfer.setData("imagepath", event.target.src);
+            event.dataTransfer.setData("id", event.target.getAttribute("value"));
         }
     },
 }
@@ -39,5 +39,8 @@ export default {
     .film-item{
         margin: 0px 10px;
         border-radius: 25px;
+    }
+    .film-item img {
+        border-radius: inherit;
     }
 </style>
